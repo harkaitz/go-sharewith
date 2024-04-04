@@ -1,4 +1,4 @@
-## -- GO --
-bin/sharewith
-bin/sharewith.*
-## -- GO --
+## -- BLOCK:go --
+build/*
+releases/*
+## -- BLOCK:go --

@@ -1,29 +1,28 @@
+.POSIX:
+.SUFFIXES:
+.PHONY: all clean install check
 all:
+PROJECT=go-sharewith
+VERSION=1.0.0
+PREFIX=/usr/local
 
-all: gen/icon-orig-facebook.b64
-all: gen/icon-orig-telegram.b64
-all: gen/icon-orig-whatsapp.b64
-all: gen/icon-orig-instagram.b64
-all: gen/icon-orig-twitter.b64
-
+##
+build/sharewith$(EXE): gen/icon-orig-facebook.b64
+build/sharewith$(EXE): gen/icon-orig-telegram.b64
+build/sharewith$(EXE): gen/icon-orig-whatsapp.b64
+build/sharewith$(EXE): gen/icon-orig-instagram.b64
+build/sharewith$(EXE): gen/icon-orig-twitter.b64
 gen/%.b64: img/%.png
 	@mkdir -p $(dir $@)
 	base64 $< > $@
-## -- AUTO-GO --
-GO_PROGRAMS += bin/sharewith$(EXE) 
-.PHONY all-go: $(GO_PROGRAMS)
-all:     all-go
-install: install-go
-clean:   clean-go
-deps:
-bin/sharewith$(EXE): deps 
-	go build -o $@ $(SHAREWITH_FLAGS) $(GO_CONF) ./cmd/sharewith
-install-go:
-	install -d $(DESTDIR)$(PREFIX)/bin
-	cp bin/sharewith$(EXE) $(DESTDIR)$(PREFIX)/bin
-clean-go:
-	rm -f $(GO_PROGRAMS)
-## -- AUTO-GO --
-## -- AUTO-SERVICE --
-
-## -- AUTO-SERVICE --
+## -- BLOCK:go --
+build/sharewith$(EXE):
+	mkdir -p build
+	go build -o $@ $(GO_CONF) ./cmd/sharewith
+all: build/sharewith$(EXE)
+install: all
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp build/sharewith$(EXE) $(DESTDIR)$(PREFIX)/bin
+clean:
+	rm -f build/sharewith$(EXE)
+## -- BLOCK:go --
